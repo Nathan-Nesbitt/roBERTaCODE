@@ -1,7 +1,2 @@
 torch
 transformers
-filelock
-pathlib
-more-itertools
-tensorboardX
-scikit-learn
