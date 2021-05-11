@@ -23,25 +23,32 @@ file should be used for all future runs.
 
 import json
 from pathlib import Path
-from tokenizers import ByteLevelBPETokenizer
 from glob import glob
-import os
-import ntpath
 import math
+import argparse
 
 
 def main(args):
     generate_data(args)
-    generate_tokenizer(args)
 
 
 def generate_data(args):
+
+    # This is where we store the input files once generated
     input_files = {}
 
-    languages = {"go": {}, "java": {}, "javascript": {}, "php": {}, "python": {}}
+    # This is just a dict of all of the accepted languages and their sizes
+    languages = {}
 
-    # Read in the data based on the language
-    for language in args.languages:
+    langs = args.languages
+
+    # If we specify all languages, just initialize all of the langs
+    if "all" in langs:
+        langs = ["python", "java", "javascript", "go", "ruby", "php"]
+
+    # Read in the files that can be worked with based on the language
+    for language in langs:
+        languages[language] = {}
         files = []
         location = "data/{}/final/jsonl/train".format(language)
         for path in Path(location).glob("*.jsonl"):
@@ -49,66 +56,49 @@ def generate_data(args):
         input_files[language] = files
 
     # Calculate the required sizes for small (SQRT(n)), medium (n/2), and large (full)
-    for language in args.languages:
-        languages[language]["small"] = round(math.sqrt(len(input_files[language])))
-        languages[language]["medium"] = round(len(input_files[language]) / 2)
-        languages[language]["large"] = round(len(input_files[language]))
+    for language in langs:
+        for size in args.sizes:
+            if size == "small":
+                languages[language][size] = round(math.sqrt(len(input_files[language])))
+            if size == "medium":
+                languages[language][size] = round(len(input_files[language]) / 2)
+            if size == "large":
+                languages[language][size] = round(len(input_files[language]))
 
-    print(languages)
-
-    # This creates the files
+    # Read in the files
     for language, files in input_files.items():
-        for size, val in languages[language].items():
-            for i in range(val):
+        for size, n_files in languages[language].items():
+            if args.combined:
+                output_file = open("data/train_combined_{}.txt".format(size), "a")
+            else:
+                output_file = open("data/train_{}_{}.txt".format(language, size), "a")
+
+            for i in range(n_files):
                 with open(files[i], "r") as input_file:
-                    with open(
-                        "data/train_{}_{}.txt".format(lang, size), "a"
-                    ) as output_file:
-                        for line in input_file:
-                            json_data = json.loads(line)
-                            for docstring in range(len(json_data["docstring_tokens"])):
-                                if n_token % 512 == 0 and n_token != 0:
-                                    output_file.write("\n")
-                                    docstring -= offset
-                                output_file.write(
-                                    json_data["docstring_tokens"][docstring] + " "
-                                )
-                                n_token += 1
-                            for code in range(len(json_data["code_tokens"])):
-                                if n_token % 512 == 0 and n_token != 0:
-                                    output_file.write("\n")
-                                    code = code - offset
-                                output_file.write(json_data["code_tokens"][code] + " ")
-                                n_token += 1
-                            output_file.write("\n")
-
-
-def generate_tokenizer(args):
-
-    lang = ""
-    if args.languages != "all":
-        for i in args.languages:
-            lang += "_{}".format(i)
-
-    paths = list(glob("data/train{}_{}.txt".format(lang, args.size)))
-
-    tokenizer = ByteLevelBPETokenizer(lowercase=False)
-
-    tokenizer.train(
-        files=paths,
-        vocab_size=32000,
-        min_frequency=3,
-        special_tokens=[
-            "<s>",
-            "<pad>",
-            "</s>",
-            "<unk>",
-            "<mask>",
-        ],
-    )
-
-    os.makedirs("tokenizer_{}".format(lang), exist_ok=True)
-    tokenizer.save_model("tokenizer_{}".format(lang))
+                    for line in input_file:
+                        json_data = json.loads(line)
+                        # We set the input to be (512 - 3) / 2 tokens to satisfy BERT architechture
+                        n = len(json_data["docstring_tokens"])
+                        if n > 254:
+                            n = 254
+                        if args.notext:
+                            n = 0
+                        output_file.write(
+                            " ".join(
+                                ["".join(k) for k in json_data["docstring_tokens"][:n]]
+                            )
+                        )
+                        output_file.write(" ")
+                        output_file.write(
+                            " ".join(
+                                [
+                                    "".join(k)
+                                    for k in json_data["code_tokens"][: 509 - n]
+                                ]
+                            )
+                        )
+                        output_file.write("\n")
+            output_file.close()
 
 
 if __name__ == "__main__":
@@ -140,14 +130,21 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--tokenizer",
-        "-t",
-        metavar="tokenizer",
-        type=str,
-        nargs="?",
-        help="Location of the tokenizer, this is a relative path to the \
-            current file. This defaults to 'tokenizer_[lang]' unless 'all' is \
-            specified then it is just 'tokenizer'",
+        "--combined",
+        "-c",
+        action="store_true",
+        help="Instead of individually creating each languages in it's own file, this script \
+            combines all of the languages passed into the model. This is used to create the \
+            all languages PTM.",
+    )
+
+    parser.add_argument(
+        "--notext",
+        "-n",
+        action="store_true",
+        help="This only uses the programming code instead of the programming code and the text. \
+            As this was not done in the original paper it is added as an extra parameter, but it \
+            can be used to test if code alone is enough to improve performance",
     )
 
     parser.add_argument(
@@ -171,4 +168,12 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    # Gross way of ensuring that inputs are arrays
+    a = []
+    a.append(args.languages)
+    args.languages = a
+
+    a = []
+    a.append(args.sizes)
+    args.sizes = a
     main(args)
