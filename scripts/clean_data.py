@@ -26,6 +26,7 @@ from pathlib import Path
 from glob import glob
 import math
 import argparse
+import tqdm
 
 
 def main(args):
@@ -73,31 +74,34 @@ def generate_data(args):
             else:
                 output_file = open("data/train_{}_{}.txt".format(language, size), "a")
 
-            for i in range(n_files):
-                with open(files[i], "r") as input_file:
-                    for line in input_file:
-                        json_data = json.loads(line)
-                        # We set the input to be (512 - 3) / 2 tokens to satisfy BERT architechture
-                        n = len(json_data["docstring_tokens"])
-                        if n > 254:
-                            n = 254
-                        if args.notext:
-                            n = 0
-                        output_file.write(
-                            " ".join(
-                                ["".join(k) for k in json_data["docstring_tokens"][:n]]
+            with tqdm(total=n_files) as tq:
+                tq.set_description("{} Files".format(language))
+                for i in range(n_files):
+                    with open(files[i], "r") as input_file:
+                        for line in input_file:
+                            json_data = json.loads(line)
+                            # We set the input to be (512 - 3) / 2 tokens to satisfy BERT architechture
+                            n = len(json_data["docstring_tokens"])
+                            if n > 254:
+                                n = 254
+                            if args.notext:
+                                n = 0
+                            output_file.write(
+                                " ".join(
+                                    ["".join(k) for k in json_data["docstring_tokens"][:n]]
+                                )
                             )
-                        )
-                        output_file.write(" ")
-                        output_file.write(
-                            " ".join(
-                                [
-                                    "".join(k)
-                                    for k in json_data["code_tokens"][: 509 - n]
-                                ]
+                            output_file.write(" ")
+                            output_file.write(
+                                " ".join(
+                                    [
+                                        "".join(k)
+                                        for k in json_data["code_tokens"][: 509 - n]
+                                    ]
+                                )
                             )
-                        )
-                        output_file.write("\n")
+                            output_file.write("\n")
+                        tq.update(1)
             output_file.close()
 
 
