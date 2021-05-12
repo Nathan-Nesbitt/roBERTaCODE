@@ -22,7 +22,7 @@ def generate_tokenizer(args):
     if "all" in langs:
         langs = ["python", "java", "javascript", "go", "ruby", "php"]
 
-    if "combined" in args:
+    if args.combined:
         for size in args.sizes:
             lang = "_combined"
             paths = list(glob("data/train{}_{}.txt".format(lang, size)))

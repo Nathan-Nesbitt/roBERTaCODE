@@ -26,7 +26,7 @@ from pathlib import Path
 from glob import glob
 import math
 import argparse
-import tqdm
+from tqdm import tqdm
 
 
 def main(args):
@@ -102,7 +102,7 @@ def generate_data(args):
                             )
                             output_file.write("\n")
                         tq.update(1)
-            output_file.close()
+            tq.close()
 
 
 if __name__ == "__main__":

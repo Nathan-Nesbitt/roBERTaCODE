@@ -92,7 +92,8 @@ def download_file(language, position):
         tq.set_description("Unzipping {}".format(language))
         for i in files:
             gunzip(i)
-            tq.update(1)
+            tq.update(1)    
+        tq.close()
 
 
 if __name__ == "__main__":
