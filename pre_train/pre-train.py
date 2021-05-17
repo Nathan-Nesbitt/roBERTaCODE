@@ -123,7 +123,7 @@ if __name__ == "__main__":
             language: java 
             size: large
             tokenizer: tokenizer_java
-            data: /data/train_java.txt
+            data: ./data/train_java.txt
             output: roBERTaCODE_java_large
         
         You can either pass these to the script via the CLI or you can modify
