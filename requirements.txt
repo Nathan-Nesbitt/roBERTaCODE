@@ -1,3 +1,5 @@
 torch
 transformers
 sh
+tqdm
+tokenizers
