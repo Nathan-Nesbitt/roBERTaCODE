@@ -117,30 +117,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    """
-        Overrides arguments from CLI if not existant. Default values are:
-        
-            language: java 
-            size: large
-            tokenizer: tokenizer_java
-            data: ./data/train_java.txt
-            output: roBERTaCODE_java_large
-        
-        You can either pass these to the script via the CLI or you can modify
-        them below. Realistically you should only have to modify the 
-    """
-    if not args.language:
-        args.language = "java"
-    if not args.size:
-        args.size = "large"
-    if not args.tokenizer:
-        if args.language == "all":
-            args.tokenizer = "tokenizer"
-        else:
-            args.tokenizer = "tokenizer_{}".format(args.language)
-    if not args.data:
-        args.data = "./data/train_{}.txt".format(args.size)
-    if not args.output:
-        args.output = "roBERTaCODE_{}_{}".format(args.language, args.size)
-
     main(args)

@@ -13,9 +13,8 @@ cd ../
 
 # Runs through the scripts
 python3 pre_train/pre-train.py \
-    --tokenizer "./tokenizer_python" \
-    --language "python" \
+    --tokenizer "./tokenizer_java" \
+    --language "java" \
     --size "large" \
-    --data "./data/train_python_large"
-    -- 
+    --data "data/train_java_large.txt"
 #
