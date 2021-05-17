@@ -1,5 +1,7 @@
 # Sets up the environment for development
 sh scripts/venv.sh
+# Load the venv
+. ./venv/bin/activate
 # Loads all of the data from CodeSearchNet
 python3 scripts/load_data.py
 # Cleans the data from CodeSearchNet
