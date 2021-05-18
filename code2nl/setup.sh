@@ -1,3 +1,5 @@
+# This is the basic steps based on CodeBERT
+
 pip install gdown
 mkdir ../data ../data/code2nl
 cd ../data/code2nl
