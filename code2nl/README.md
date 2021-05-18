@@ -7,7 +7,7 @@ also known as Code Summarization.
 1. Step 1 is to set up the model you would like to fine tune. In this research I used RoBERTa
 2. You can pre-train the model using the main script, or you can just use the plain RoBERTa 
     model and pass it in. 
-3. Open the [fine-tune.sh](fine_tune/fine-tune.sh) script. This is a template script that 
+3. Open the [fine-tune.sh](fine-tune.sh) script. This is a template script that 
     outlines the required parameters for the `run.py` script provided in the CodeBERT repo. 
     To fine-tune a model you simply need to change the following parameters
 
