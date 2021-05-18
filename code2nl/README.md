@@ -1,5 +1,5 @@
 # Fine-Tuning
-This folder contains all of the nessisary scripts to fine-tune a model on the code2nl task 
+This folder contains all of the necessary scripts to fine-tune a model on the code2nl task 
 also known as Code Summarization.
 
 ## Running
@@ -12,7 +12,7 @@ also known as Code Summarization.
     To fine-tune a model you simply need to change the following parameters
 
     - lang - This is the downstream language. It can 
-        be python, java, go, javascript, 
+        be python, java, go, javascript, ruby, php
 
     - PTMlang - This is just used for naming, set it to 
         be the language you used for pre-training.
@@ -24,7 +24,6 @@ also known as Code Summarization.
         my thesis as the CodeBERT repository does not use partial training.  
 
 4. Run the main script for training `fine-tune.sh`
-5. If you want to know the BLEU output you can copy the 
 
 ## Differences from CodeBERT repository
 
@@ -34,4 +33,8 @@ training the models I had to add in the functionality to break after `n` epochs.
 The original scripts output 2 files for the testing, you should be aware that one of these
 files is `validation` data and one is `testing` data. The extra scripts for calculating the
 BLEU scores take this into account and only calculate the `test` scores, *BUT* if you are
-looking at the raw output (`test_{}.gold` and `test_{}.output`) the first file is from the `validation` dataset and the second file is from the `test` dataset. 
+looking at the raw output (`test_{}.gold` and `test_{}.output`) the first file is from the 
+`validation` dataset and the second file is from the `test` dataset. 
+
+We also provide the full BLEU metrics (1-4) along with METEOR, ROUGE_L, and CIDEr.
+The original CodeBERT repo used the smoothed BLEU score.
