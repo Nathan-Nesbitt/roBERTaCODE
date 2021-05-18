@@ -1,14 +1,12 @@
 # RoBERTaCODE - Pre-Training RoBERTa on Code Summarization
-This is the code used to train the model used in Nathan Nesbitt's Honours thesis.
-It can be used to pre-train a roBERTa model using code, then fine-tuning it on
-the task of code summarization.
+This is the code used to train the model used in Nathan Nesbitt's Honours thesis
+on code summarization using Transformer PTMs. It can be used to pre-train a 
+roBERTa model using code, then fine-tuning it on the task of code summarization.
 
 The fine-tuning in this repository is based on the CodeBERT repository. 
 
-There have been some changes made, this includes:
-
-1. Removing the circular loading of the data (clean_data_OLD.py)
-2. Adding in the ability to break after n epochs in code2nl
+The original thesis code has been re-written to make it easier to understand and
+run.
 
 ## Requirements
 - Python3
