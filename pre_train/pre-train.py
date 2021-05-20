@@ -112,12 +112,12 @@ if __name__ == "__main__":
         type=str,
         nargs="?",
         help="Location of the output for this run, this is a relative path to the \
-            current file. This will default to 'roBERTaCODE_[lang]_[size]'",
+            current file. This will default to 'roBERTaCODE_[language]_[size]'",
     )
 
     args = parser.parse_args()
 
     if not args.output:
-        args.output = "roBERTaCODE_{}_{}".format(args.lang, args.size)
+        args.output = "roBERTaCODE_{}_{}".format(args.language, args.size)
 
     main(args)
