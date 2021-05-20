@@ -117,4 +117,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if not args.output:
+        args.output = "roBERTaCODE_{}_{}".format(args.lang, args.size)
+
     main(args)
