@@ -23,7 +23,11 @@ also known as Code Summarization.
         automatically saves the best possible model. The reason for this is outlined in 
         my thesis as the CodeBERT repository does not use partial training.  
 
-4. Run the main script for training `fine-tune.sh`
+4. Run the `setup.sh` script to download the datasets.
+5. Move the tokenizer files for the language into the `pretrained_model` directory.
+    This means that you should have the `merges.txt` and `vocab.json` in the 
+    `roBERTaCODE_{language}_{size}` directory.
+5. Run the main script for training `fine-tune.sh`
 
 ## Differences from CodeBERT repository
 

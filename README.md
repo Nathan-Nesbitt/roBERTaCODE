@@ -1,7 +1,10 @@
 # RoBERTaCODE - Code Summarization using RoBERTa PTM
 This is the code used to train the model used in my (Nathan Nesbitt) Honours thesis
-on code summarization using Transformer PTMs. It can be used to pre-train a 
-roBERTa model using code, then fine-tuning it on the task of code summarization.
+on code summarization using Transformer PTMs titled "Pre-Trained Models for 
+Machine Translation of Code and Natural Language".
+
+It can be used to pre-train a roBERTa model using code, then fine-tuning it on 
+the task of code summarization.
 
 The fine-tuning in this repository is based on the CodeBERT repository. 
 
