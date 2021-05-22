@@ -1,5 +1,5 @@
 # RoBERTaCODE - Code Summarization using RoBERTa PTM
-This is the code used to train the model used in my (Nathan Nesbitt) Honours thesis
+This is the code used to train the model used in my (Nathan Nesbitt) thesis
 on code summarization using Transformer PTMs titled "Pre-Trained Models for 
 Machine Translation of Code and Natural Language".
 
