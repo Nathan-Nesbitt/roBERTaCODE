@@ -10,7 +10,7 @@
 lang=java # This is the fine tune language
 PTMlang=java # This is the PTM language that you chose, just used for naming 
 pretrained_model="../roBERTaCODE_java_large/" # This is where the PTM is stored, or roberta-base if you don't have a PTM
-epochs=40 # This is the number of epochs, view the readme to understand why this is 40 
+epochs=40 # This is the number of epochs, view the readme to understand why this is 40 if you don't set to 40 it will not run full 
 
 # These are variables that can be changed if you want to change the experiment
 # but they will not allow for repeat.
@@ -29,6 +29,16 @@ data_dir=../data/code2nl/CodeSearchNet
 output_dir="model/PTM_${PTMlang}_epochs_${epochs}_finetune_${lang}"
 train_file=$data_dir/$lang/train.jsonl
 dev_file=$data_dir/$lang/valid.jsonl 
+test_file=$data_dir/$lang/test.jsonl
+
+# This does need to be changed if you are running any of the non full epochs
+# which means that the number of epochs = 40. This is an arbitrary number that 
+if [[ $epochs -eq 40]]
+then
+    test_model=$output_dir/checkpoint-best-bleu/pytorch_model.bin
+else
+    test_model=$output_dir/checkpoint-last/pytorch_model.bin
+fi
 
 # Main script
 
@@ -49,6 +59,20 @@ if python3 scripts/run.py \
     --train_steps $train_steps \
     --num_train_epochs $epochs \
     --eval_steps $eval_steps ; then
+
+    # Running the eval seperately
+    python scripts/run.py 
+        --do_test 
+        --model_type roberta 
+        --model_name_or_path $pretrained_model 
+        --load_model_path $test_model 
+        --dev_filename $dev_file 
+        --test_filename $test_file 
+        --output_dir $output_dir 
+        --max_source_length $source_length 
+        --max_target_length $target_length 
+        --beam_size $beam_size 
+        --eval_batch_size $batch_size
 
     # Running custom BLEU 
 
