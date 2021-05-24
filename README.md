@@ -8,9 +8,6 @@ the task of code summarization.
 
 The fine-tuning in this repository is based on the CodeBERT repository. 
 
-The original thesis code has been re-written to make it easier to understand and
-run.
-
 If you do not understand what this introduction means, read the [TLDR](#TLDR) 
 which contains a summary of the functionality.
 
@@ -22,6 +19,10 @@ The fine-tuned models achieved the following scores:
 | RoBERTaCODE (Python)   |   Python   |     18.35     |  24.80 |  13.36 |  8.02  |  5.20  |  19.44 |  34.47  | 0.88  |
 | RoBERTaCODE (All)      |    Java    |     17.65     |  24.86 |  14.46 |  9.06  |  6.01  |  19.40 |  33.95  | 0.91  |
 
+The original thesis code has been re-written to make it easier to understand and
+run. It gets trimmed at 512 characters, which is *not* the same as the original
+paper which wrapped the text at 512 and moved it onto the next line. This can
+be achieved by running the old version of the code.
 
 
 ## Requirements
