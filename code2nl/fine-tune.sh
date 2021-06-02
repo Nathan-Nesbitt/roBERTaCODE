@@ -33,7 +33,7 @@ test_file=$data_dir/$lang/test.jsonl
 
 # This does need to be changed if you are running any of the non full epochs
 # which means that the number of epochs = 1. This is an arbitrary number that 
-if [[ $epochs -eq 1]]
+if [[ $epochs -eq 1 ]];
 then
     test_model=$output_dir/checkpoint-last/pytorch_model.bin
 else
