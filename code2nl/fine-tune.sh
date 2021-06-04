@@ -61,17 +61,17 @@ if python3 scripts/run.py \
     --eval_steps $eval_steps ; then
 
     # Running the eval seperately
-    python scripts/run.py 
-        --do_test 
-        --model_type roberta 
-        --model_name_or_path $pretrained_model 
-        --load_model_path $test_model 
-        --dev_filename $dev_file 
-        --test_filename $test_file 
-        --output_dir $output_dir 
-        --max_source_length $source_length 
-        --max_target_length $target_length 
-        --beam_size $beam_size 
+    python scripts/run.py \
+        --do_test \
+        --model_type roberta \
+        --model_name_or_path $pretrained_model \
+        --load_model_path $test_model \
+        --dev_filename $dev_file \
+        --test_filename $test_file \
+        --output_dir $output_dir \
+        --max_source_length $source_length \
+        --max_target_length $target_length \
+        --beam_size $beam_size \
         --eval_batch_size $batch_size
 
     # Running custom BLEU 
