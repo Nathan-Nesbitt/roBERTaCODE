@@ -10,7 +10,7 @@
 from transformers import RobertaConfig, RobertaForMaskedLM, RobertaTokenizerFast
 from transformers import LineByLineTextDataset
 from transformers import DataCollatorForLanguageModeling
-from transformers import Trainer, TrainingArguments
+from transformers import Trainer, TrainingArguments, EarlyStoppingCallback
 import argparse
 
 
@@ -30,6 +30,12 @@ def main(args):
         block_size=128,
     )
 
+    validation_dataset = LineByLineTextDataset(
+        tokenizer=tokenizer,
+        file_path=args.valid,
+        block_size=128,
+    )
+
     # Initialize the data collector
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer)
 
@@ -37,18 +43,21 @@ def main(args):
     training_args = TrainingArguments(
         output_dir=args.output,
         overwrite_output_dir=True,
-        num_train_epochs=10,
-        per_gpu_train_batch_size=24,
+        num_train_epochs=30,
+        per_device_train_batch_size=64,
         save_steps=10_000,
-        save_total_limit=10,
+        save_total_limit=5,
+        evaluation_strategy="epoch",
+        load_best_model_at_end=True,
     )
 
     # Train the model
     trainer = Trainer(
         model=model,
         args=training_args,
-        data_collator=data_collator,
+        callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
         train_dataset=dataset,
+        eval_dataset=validation_dataset,
     )
 
     trainer.train()
@@ -103,6 +112,16 @@ if __name__ == "__main__":
         nargs="?",
         help="Location of the training data file, this is a relative path to the \
             current file. This will default to './data/train_[size].txt'",
+    )
+
+    parser.add_argument(
+        "--validation",
+        "-v",
+        metavar="valid",
+        type=str,
+        nargs="?",
+        help="Location of the validation data file, this is a relative path to the \
+            current file. This will default to './data/valid_[size].txt'",
     )
 
     parser.add_argument(

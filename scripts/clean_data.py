@@ -31,9 +31,10 @@ from tqdm import tqdm
 
 def main(args):
     generate_data(args)
+    generate_data(args, train=False)
 
 
-def generate_data(args):
+def generate_data(args, train=True):
 
     # This is where we store the input files once generated
     input_files = {}
@@ -51,7 +52,10 @@ def generate_data(args):
     for language in langs:
         languages[language] = {}
         files = []
-        location = "data/{}/final/jsonl/train".format(language)
+        if train:
+            location = f"data/{language}/final/jsonl/train"
+        else:
+            location = f"data/{language}/final/jsonl/valid"
         for path in Path(location).glob("*.jsonl"):
             files.append(location + "/" + path.name)
         input_files[language] = files
@@ -70,12 +74,18 @@ def generate_data(args):
     for language, files in input_files.items():
         for size, n_files in languages[language].items():
             if args.combined:
-                output_file = open("data/train_combined_{}.txt".format(size), "a")
+                if train:
+                    output_file = open(f"data/train_combined_{size}.txt", "a")
+                else:
+                    output_file = open(f"data/valid_combined_{size}.txt", "a")
             else:
-                output_file = open("data/train_{}_{}.txt".format(language, size), "a")
+                if train:
+                    output_file = open(f"data/train_{language}_{size}.txt", "a")
+                else:
+                    output_file = open(f"data/valid_{language}_{size}.txt", "a")
 
             with tqdm(total=n_files) as tq:
-                tq.set_description("{} Files".format(language))
+                tq.set_description(f"{language} Files")
                 for i in range(n_files):
                     with open(files[i], "r") as input_file:
                         for line in input_file:
@@ -88,7 +98,10 @@ def generate_data(args):
                                 n = 0
                             output_file.write(
                                 " ".join(
-                                    ["".join(k) for k in json_data["docstring_tokens"][:n]]
+                                    [
+                                        "".join(k)
+                                        for k in json_data["docstring_tokens"][:n]
+                                    ]
                                 )
                             )
                             output_file.write(" ")

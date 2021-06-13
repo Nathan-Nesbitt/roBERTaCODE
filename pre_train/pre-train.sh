@@ -16,5 +16,6 @@ python3 pre_train/pre-train.py \
     --tokenizer "./tokenizer_java" \
     --language "java" \
     --size "large" \
-    --data "data/train_java_large.txt"
+    --data "data/train_java_large.txt" \
+    --validation "data/valid_java_large.txt"
 #
