@@ -39,7 +39,7 @@ def main(args):
     tokenizer = RobertaTokenizerFast.from_pretrained(args.tokenizer)
 
     # Define the model
-    config = RobertaConfig(vocab_size=32000)
+    config = RobertaConfig(vocab_size=50265)
     model = RobertaForMaskedLM(config=config)
 
     # Import the dataset
@@ -62,8 +62,8 @@ def main(args):
     training_args = TrainingArguments(
         output_dir=args.output,
         overwrite_output_dir=True,
-        num_train_epochs=30,
-        per_device_train_batch_size=64,
+        num_train_epochs=50,
+        per_device_train_batch_size=32,
         save_steps=10_000,
         save_total_limit=5,
         evaluation_strategy="epoch",
