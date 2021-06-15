@@ -51,7 +51,7 @@ def main(args):
 
     validation_dataset = LineByLineTextDataset(
         tokenizer=tokenizer,
-        file_path=args.valid,
+        file_path=args.validation,
         block_size=128,
     )
 
