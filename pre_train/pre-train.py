@@ -75,6 +75,7 @@ def main(args):
         model=model,
         args=training_args,
         callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
+        data_collator=data_collator,
         train_dataset=dataset,
         eval_dataset=validation_dataset,
     )
