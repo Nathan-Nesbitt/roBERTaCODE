@@ -10,8 +10,27 @@
 from transformers import RobertaConfig, RobertaForMaskedLM, RobertaTokenizerFast
 from transformers import LineByLineTextDataset
 from transformers import DataCollatorForLanguageModeling
-from transformers import Trainer, TrainingArguments, EarlyStoppingCallback
+from transformers import (
+    Trainer,
+    TrainingArguments,
+    EarlyStoppingCallback,
+    TrainerCallback,
+)
 import argparse
+
+
+class OutputCallback(TrainerCallback):
+    """
+    This is a custom callback that outputs the current model state.
+    This will allow us to visualize the model training as it progresses.
+    """
+
+    def on_evaluate(self, args, state, control, **kwargs):
+        print(f"Evaluated Epoch {state.epoch}")
+        print(f"This epoch resulted in the metric: {self.metrics}")
+        print(
+            f"The best metric so far is {state.best_metric} on checkpoint {state.best_model_checkpoint }"
+        )
 
 
 def main(args):
@@ -59,6 +78,9 @@ def main(args):
         train_dataset=dataset,
         eval_dataset=validation_dataset,
     )
+
+    # Added in a callback to output the results for the epochs
+    trainer.add_callback(OutputCallback)
 
     trainer.train()
 
