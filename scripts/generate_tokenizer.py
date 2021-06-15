@@ -31,7 +31,7 @@ def generate_tokenizer(args):
 
             tokenizer.train(
                 files=paths,
-                vocab_size=32000,
+                vocab_size=50265,
                 min_frequency=3,
                 special_tokens=[
                     "<s>",
@@ -56,7 +56,7 @@ def generate_tokenizer(args):
 
                 tokenizer.train(
                     files=paths,
-                    vocab_size=32000,
+                    vocab_size=50265,
                     min_frequency=3,
                     special_tokens=[
                         "<s>",
