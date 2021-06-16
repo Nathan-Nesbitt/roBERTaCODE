@@ -38,7 +38,7 @@ def main(args):
     tokenizer = RobertaTokenizerFast.from_pretrained(args.tokenizer)
 
     # Define the model
-    config = RobertaConfig(vocab_size=50265)
+    config = RobertaConfig(vocab_size=32000)
     model = RobertaForMaskedLM(config=config)
 
     # Import the dataset
