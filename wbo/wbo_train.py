@@ -106,6 +106,9 @@ tokenizer = RobertaTokenizerFast.from_pretrained(
     max_len=512,
 )
 
+# load pretrained model
+model = RobertaForSequenceClassification.from_pretrained(model_name)
+
 # The data has to be loaded in first, as we can reallocate the pairs, but not
 # the model.
 values, labels = load_data(train_location, tokenizer)
@@ -116,10 +119,6 @@ values, labels = load_data(validation_location, tokenizer)
 validation_dataset = codeDataset(values, labels)
 validation = DataLoader(validation_dataset, batch_size=64)
 del values, labels
-
-
-# load pretrained model
-model = RobertaForSequenceClassification.from_pretrained(model_name)
 
 training_args = TrainingArguments(
     output_dir=directory,
