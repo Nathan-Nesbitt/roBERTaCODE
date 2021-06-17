@@ -17,6 +17,7 @@ from transformers import (
     TrainerCallback,
 )
 import argparse
+import logging
 
 
 class OutputCallback(TrainerCallback):
@@ -26,8 +27,8 @@ class OutputCallback(TrainerCallback):
     """
 
     def on_evaluate(self, args, state, control, **kwargs):
-        print(f"Evaluated Epoch {state.epoch}")
-        print(
+        logging.info(f"Evaluated Epoch {state.epoch}")
+        logging.info(
             f"The best metric so far is {state.best_metric} on checkpoint {state.best_model_checkpoint }"
         )
 
