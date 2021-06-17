@@ -36,7 +36,10 @@ class OutputCallback(TrainerCallback):
 def main(args):
 
     # Import the custom trained tokenizer
-    tokenizer = RobertaTokenizerFast.from_pretrained(args.tokenizer)
+    tokenizer = RobertaTokenizerFast.from_pretrained(
+        args.tokenizer,
+        max_len=512,
+    )
 
     # Define the model
     config = RobertaConfig(vocab_size=32000)
