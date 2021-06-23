@@ -42,7 +42,7 @@ fi
 
 # Main script
 
-if python3 scripts/run.py \
+if python3 run.py \
     --do_train \
     --do_eval \
     --model_type roberta \
@@ -61,7 +61,7 @@ if python3 scripts/run.py \
     --eval_steps $eval_steps ; then
 
     # Running the eval seperately
-    python scripts/run.py \
+    python run.py \
         --do_test \
         --model_type roberta \
         --model_name_or_path $pretrained_model \
