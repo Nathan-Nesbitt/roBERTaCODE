@@ -112,12 +112,11 @@ model = RobertaForSequenceClassification.from_pretrained(model_name)
 # The data has to be loaded in first, as we can reallocate the pairs, but not
 # the model.
 values, labels = load_data(train_location, tokenizer)
-train_dataset = codeDataset(values, labels)
-dataset = DataLoader(train_dataset, batch_size=64)
+dataset = codeDataset(values, labels)
 
 values, labels = load_data(validation_location, tokenizer)
-validation_dataset = codeDataset(values, labels)
-validation = DataLoader(validation_dataset, batch_size=64)
+validation = codeDataset(values, labels)
+
 del values, labels
 
 training_args = TrainingArguments(
