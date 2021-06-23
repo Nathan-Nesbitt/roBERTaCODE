@@ -636,7 +636,7 @@ class Trainer:
         logger.info("  Num epoch = %d", self.num_train_epochs)
 
         self.model.train()
-        dev_dataset = {}
+        self.dev_dataset = {}
         (
             nb_tr_examples,
             nb_tr_steps,
