@@ -28,7 +28,7 @@ data_dir=./data
 
 output_dir="model/PTM_${PTMlang}_epochs_${epochs}_finetune_${lang}"
 train_file=$data_dir/train.jsonl
-dev_file=$data_dir/valid.jsonl 
+dev_file=$data_dir/dev.jsonl 
 test_file=$data_dir/test.jsonl
 
 # This does need to be changed if you are running any of the non full epochs
