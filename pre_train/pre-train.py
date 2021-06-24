@@ -26,70 +26,126 @@ class OutputCallback(TrainerCallback):
     This will allow us to visualize the model training as it progresses.
     """
 
+    def __init__(self) -> None:
+        super().__init__()
+
     def on_evaluate(self, args, state, control, **kwargs):
         logging.info(f"Evaluated Epoch {state.epoch}")
+        logging.info(f"Current Epoch has metric {self.metrics}")
         logging.info(
             f"The best metric so far is {state.best_metric} on checkpoint {state.best_model_checkpoint }"
         )
 
 
+class PreTrainer:
+    def __init__(
+        self,
+        tokenizer_location,
+        data_location,
+        valid_location,
+        output_location,
+        epochs,
+        language,
+        size,
+        early_callback=False,
+        early_stopping_patience=2,
+    ) -> None:
+        """
+        Initializes the Pre-Trainer for RoBERTa. All arguments are fairly straightforward
+        but the `early_callback` is used to decide if you want to run it until it reaches
+        the epoch count or if you want to kill it first.
+        """
+
+        # Define the values for the model
+        self.data_location = data_location
+        self.valid_location = valid_location
+        self.tokenizer_location = tokenizer_location
+        self.output_location = output_location
+        self.epochs = epochs
+        self.language = language
+        self.size = size
+        self.early_callback = early_callback
+        self.early_stopping_patience = early_stopping_patience
+
+        # Create the config file and the model
+        self.config = RobertaConfig(vocab_size=32000)
+        self.model = RobertaForMaskedLM(config=self.config)
+
+        # Load in the datasets
+        self.train_dataset = LineByLineTextDataset(
+            tokenizer=self.tokenizer,
+            file_path=self.data_location,
+            block_size=128,
+        )
+
+        self.validation_dataset = LineByLineTextDataset(
+            tokenizer=self.tokenizer,
+            file_path=args.validation,
+            block_size=128,
+        )
+
+        self.data_collator = DataCollatorForLanguageModeling(tokenizer=self.tokenizer)
+
+        self.training_args = TrainingArguments(
+            output_dir=self.output_location,
+            overwrite_output_dir=True,
+            num_train_epochs=self.epochs,
+            per_device_train_batch_size=32,
+            save_steps=10_000,
+            save_total_limit=5,
+            evaluation_strategy="epoch",
+            load_best_model_at_end=True,
+        )
+
+    def train(self):
+        trainer = None
+        if self.early_callback:
+            trainer = Trainer(
+                model=self.model,
+                args=self.training_args,
+                callbacks=[
+                    EarlyStoppingCallback(
+                        early_stopping_patience=self.early_stopping_patience
+                    ),
+                    OutputCallback(),
+                ],
+                data_collator=self.data_collator,
+                train_dataset=self.train_dataset,
+                eval_dataset=self.validation_dataset,
+            )
+        else:
+            trainer = Trainer(
+                model=self.model,
+                args=self.training_args,
+                callbacks=[
+                    OutputCallback(),
+                ],
+                data_collator=self.data_collator,
+                train_dataset=self.train_dataset,
+                eval_dataset=self.validation_dataset,
+            )
+
+        trainer.train()
+
+        # Save the model
+        trainer.save_model(self.output_location)
+
+
 def main(args):
 
-    # Import the custom trained tokenizer
-    tokenizer = RobertaTokenizerFast.from_pretrained(
-        args.tokenizer,
-        max_len=512,
+    trainer = PreTrainer(
+        tokenizer_location=args.tokenizer,
+        data_location=args.data,
+        valid_location=args.validation,
+        output_location=args.output,
+        epochs=args.epochs,
+        language=args.language,
+        size=args.size,
+        early_callback=args.early_callback,
+        early_stopping_patience=args.early_stopping_patience,
     )
-
-    # Define the model
-    config = RobertaConfig(vocab_size=32000)
-    model = RobertaForMaskedLM(config=config)
-
-    # Import the dataset
-    dataset = LineByLineTextDataset(
-        tokenizer=tokenizer,
-        file_path=args.data,
-        block_size=128,
-    )
-
-    validation_dataset = LineByLineTextDataset(
-        tokenizer=tokenizer,
-        file_path=args.validation,
-        block_size=128,
-    )
-
-    # Initialize the data collector
-    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer)
-
-    # Set all of the training arguments
-    training_args = TrainingArguments(
-        output_dir=args.output,
-        overwrite_output_dir=True,
-        num_train_epochs=50,
-        per_device_train_batch_size=32,
-        save_steps=10_000,
-        save_total_limit=5,
-        evaluation_strategy="epoch",
-        load_best_model_at_end=True,
-    )
-
-    # Train the model
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        callbacks=[EarlyStoppingCallback(early_stopping_patience=2)],
-        data_collator=data_collator,
-        train_dataset=dataset,
-        eval_dataset=validation_dataset,
-    )
-
-    # Added in a callback to output the results for the epochs
-    trainer.add_callback(OutputCallback)
 
     trainer.train()
-
-    # Save the mode
-    trainer.save_model("./roBERTaCODE_{}_{}".format(args.language, args.size))
 
 
 if __name__ == "__main__":
@@ -114,7 +170,7 @@ if __name__ == "__main__":
         "-s",
         metavar="size",
         type=str,
-        nargs="?",
+        nargs=1,
         help="The size of the training set that you are training on. \
             The options are small, medium, large.",
     )
@@ -124,7 +180,7 @@ if __name__ == "__main__":
         "-t",
         metavar="tokenizer",
         type=str,
-        nargs="?",
+        nargs=1,
         help="Location of the tokenizer, this is a relative path to the \
             current file. This defaults to 'tokenizer_[lang]' unless 'all' is \
             specified then it is just 'tokenizer'",
@@ -135,7 +191,7 @@ if __name__ == "__main__":
         "-d",
         metavar="data",
         type=str,
-        nargs="?",
+        nargs=1,
         help="Location of the training data file, this is a relative path to the \
             current file. This will default to './data/train_[size].txt'",
     )
@@ -145,7 +201,7 @@ if __name__ == "__main__":
         "-v",
         metavar="valid",
         type=str,
-        nargs="?",
+        nargs=1,
         help="Location of the validation data file, this is a relative path to the \
             current file. This will default to './data/valid_[size].txt'",
     )
@@ -155,14 +211,43 @@ if __name__ == "__main__":
         "-o",
         metavar="output",
         type=str,
-        nargs="?",
+        nargs=1,
         help="Location of the output for this run, this is a relative path to the \
             current file. This will default to 'roBERTaCODE_[language]_[size]'",
+    )
+
+    parser.add_argument(
+        "--epochs",
+        "-e",
+        metavar="epochs",
+        type=int,
+        nargs=1,
+        help="Number of epochs to train the model for.",
+    )
+
+    parser.add_argument(
+        "--early_callback",
+        "-ec",
+        metavar="early_callback",
+        default=False,
+        type=bool,
+        nargs=1,
+        help="This sets the model to stop once it plateaus.",
+    )
+
+    parser.add_argument(
+        "--early_stopping_patience",
+        "-esp",
+        metavar="early_stopping_patience",
+        default=2,
+        type=int,
+        nargs=1,
+        help="How many epochs a model can plateau for before killing.",
     )
 
     args = parser.parse_args()
 
     if not args.output:
-        args.output = "roBERTaCODE_{}_{}".format(args.language, args.size)
+        args.output = f"roBERTaCODE_{args.language}_{args.size}_{args.epochs}"
 
     main(args)
