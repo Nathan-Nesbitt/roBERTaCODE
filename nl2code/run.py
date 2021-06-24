@@ -641,7 +641,7 @@ class Trainer:
             nb_tr_examples,
             nb_tr_steps,
             tr_loss,
-            global_step,
+            self.global_step,
             self.best_bleu,
             self.best_loss,
         ) = (
@@ -682,7 +682,7 @@ class Trainer:
                     optimizer.step()
                     optimizer.zero_grad()
                     scheduler.step()
-                    global_step += 1
+                    self.global_step += 1
             if self.do_eval:
                 self.eval()
 
