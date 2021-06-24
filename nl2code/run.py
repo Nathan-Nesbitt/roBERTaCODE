@@ -669,10 +669,10 @@ class Trainer:
                 if self.gradient_accumulation_steps > 1:
                     loss = loss / self.gradient_accumulation_steps
                 tr_loss += loss.item()
-                train_loss = round(
+                self.train_loss = round(
                     tr_loss * self.gradient_accumulation_steps / (nb_tr_steps + 1), 4
                 )
-                bar.set_description("epoch {} loss {}".format(epoch, train_loss))
+                bar.set_description("epoch {} loss {}".format(epoch, self.train_loss))
                 nb_tr_examples += source_ids.size(0)
                 nb_tr_steps += 1
                 loss.backward()
