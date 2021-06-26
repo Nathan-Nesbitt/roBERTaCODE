@@ -98,8 +98,8 @@ def read_examples(filename):
             examples.append(
                 Example(
                     idx=idx,
-                    source=code,
-                    target=nl,
+                    source=nl,
+                    target=code,
                 )
             )
     return examples
