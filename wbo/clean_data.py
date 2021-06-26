@@ -74,5 +74,8 @@ def clean_data(location):
 
 train_location = "./data/train/full.txt"
 validation_location = "./data/validation/full.txt"
+test_location = "./data/test/full.txt"
+
 clean_data(train_location)
 clean_data(validation_location)
+clean_data(test_location)
