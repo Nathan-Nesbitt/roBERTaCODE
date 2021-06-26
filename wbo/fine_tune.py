@@ -24,7 +24,7 @@ tokenizer = RobertaTokenizerFast.from_pretrained(
     cls_token="<s>",
     pad_token="<pad>",
     mask_token="<mask>",
-    max_len=512,
+    max_len=510,
 )
 
 # Load in the dataset
