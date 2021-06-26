@@ -3,3 +3,4 @@ transformers
 sh
 tqdm
 tokenizers
+datasets
