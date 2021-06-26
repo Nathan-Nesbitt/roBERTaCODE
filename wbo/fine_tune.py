@@ -14,7 +14,7 @@ from datasets import load_dataset
 
 """Script to finetune an RoBERTa PTM on the Wrong Binary Operator data until fully trained."""
 
-model_name = "./roBERTaCODE_python_large/"
+model_name = "../roBERTaCODE_python_large/"
 
 # Load tokenizer
 tokenizer = RobertaTokenizerFast.from_pretrained(
