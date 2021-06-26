@@ -81,5 +81,5 @@ for dir in ["train", "test", "validation"]:
                     text_file.write(line)
                     size += 1
     location = f"./data/{dir}/full.txt"
-    clean_data(location=location, size=size, position=position)
+    clean_data(location=location, length=size, position=position)
     position += 1
