@@ -62,11 +62,11 @@ def clean_data(location):
                 seperatedFunction += jsonObject["function"][element]
         if jsonObject["label"] == "Correct":
             values_file.write(
-                json.dumps({"function": seperatedFunction, "labels": "1"}) + "\n"
+                json.dumps({"input_ids": seperatedFunction, "labels": 1}) + "\n"
             )
         else:
             values_file.write(
-                json.dumps({"function": seperatedFunction, "labels": "0"}) + "\n"
+                json.dumps({"input_ids": seperatedFunction, "labels": 0}) + "\n"
             )
     reading_file.close()
     values_file.close()

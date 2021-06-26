@@ -6,6 +6,9 @@ from transformers import (
     RobertaForSequenceClassification,
     EarlyStoppingCallback,
 )
+import json
+import torch
+from torch.utils.data import DataLoader
 from datasets import load_dataset
 
 
@@ -35,14 +38,14 @@ dataset = load_dataset(
 
 
 def encode(examples):
-    return tokenizer(
-        examples["function"], examples["labels"], truncation=True, padding="max_length"
-    )
+    return tokenizer(examples["input_ids"], truncation=True, padding="max_length")
 
 
 train_data = dataset["train"].map(encode, batched=True)
 validation_data = dataset["validation"].map(encode, batched=True)
 del dataset
+
+print(train_data[0])
 
 # load pretrained model
 model = RobertaForSequenceClassification.from_pretrained(model_name)
@@ -53,7 +56,7 @@ training_args = TrainingArguments(
     output_dir=directory,
     overwrite_output_dir=True,
     num_train_epochs=40,
-    per_device_train_batch_size=64,
+    per_device_train_batch_size=32,
     save_steps=10_000,
     save_total_limit=2,
     load_best_model_at_end=True,
