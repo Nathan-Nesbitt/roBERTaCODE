@@ -73,6 +73,32 @@ if python3 run.py \
         --max_target_length $target_length \
         --beam_size $beam_size \
         --eval_batch_size $batch_size
+
+    # Change into the proper directory
+    cd $output_dir
+
+    # Incase you haven't loaded in git on the system
+    # module load git
+
+    # Had some issues with SSL certs on the system, this downloads punkt from source.
+    # curl https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip --output punkt.zip
+    # unzip punkt.zip
+
+
+    # Sets the original output files. These are the test files instead of the validation.
+    targets="test_1.gold"
+    predictions="test_1.output"
+
+    # Removes the numbers from the files
+    sed -e 's/^[0-9][0-9]*[[:space:]][[:space:]]*//' $targets > targets.out
+    sed -e 's/^[0-9][0-9]*[[:space:]][[:space:]]*//' $predictions > predictions.out
+
+    # Installs the BLEU scoring scripts
+    pip3 install git+https://github.com/Maluuba/nlg-eval.git@master
+
+    # Evaluates
+    nlg-eval --setup
+    nlg-eval --hypothesis=targets.out --references=predictions.out > scores.txt
 else 
     echo "Error occured before model trained. No output files generated."
 fi
