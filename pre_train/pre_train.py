@@ -90,7 +90,7 @@ class PreTrainer:
             output_dir=self.output_location,
             overwrite_output_dir=True,
             num_train_epochs=self.epochs,
-            per_device_train_batch_size=32,
+            per_device_train_batch_size=64,
             save_steps=10_000,
             save_total_limit=5,
             evaluation_strategy="epoch",
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     # Checks to see if there were any params passed via CLI, if not just assign
     # to the defaults in this file.
     parser = argparse.ArgumentParser(
-        prog="pre-train.py", description="Pre-Trains the RoBERTa model on code."
+        prog="pre_train.py", description="Pre-Trains the RoBERTa model on code."
     )
 
     parser.add_argument(
