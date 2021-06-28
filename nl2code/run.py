@@ -91,9 +91,9 @@ def read_examples(filename):
             js = json.loads(line)
             if "idx" not in js:
                 js["idx"] = idx
-            code = " ".join(js["code"]).replace("\n", " ")
+            code = js["code"].replace("\n", " ")
             code = " ".join(code.strip().split())
-            nl = " ".join(js["nl"]).replace("\n", "")
+            nl = js["nl"].replace("\n", "")
             nl = " ".join(nl.strip().split())
             examples.append(
                 Example(
