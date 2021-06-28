@@ -1,4 +1,3 @@
-
 # Copyright 2021 Nathan Nesbitt
 # See LICENSE.md for more information
 
@@ -11,12 +10,12 @@ cd ../
 . venv/bin/activate
 
 # Runs through the scripts
-python3 pre_train/pre-train.py \
-    --tokenizer "./tokenizer_java" \
-    --language "java" \
+python3 pre_train/pre_train.py \
+    --tokenizer "./tokenizer_combined_small" \
+    --language "combined" \
     --size "large" \
-    --data "data/train_java_large.txt" \
-    --validation "data/valid_java_large.txt" \
+    --data "data/train_combined_small.txt" \
+    --validation "data/valid_combined_small.txt" \
     --epochs 20 \
     --early_callback \
     --early_stopping_patience 2

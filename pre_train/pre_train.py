@@ -67,6 +67,8 @@ class PreTrainer:
         self.early_callback = early_callback
         self.early_stopping_patience = early_stopping_patience
 
+        self.tokenizer = RobertaTokenizerFast.from_pretrained(self.tokenizer_location)
+
         # Create the config file and the model
         self.config = RobertaConfig(vocab_size=32000)
         self.model = RobertaForMaskedLM(config=self.config)
@@ -134,15 +136,15 @@ class PreTrainer:
 def main(args):
 
     trainer = PreTrainer(
-        tokenizer_location=args.tokenizer,
-        data_location=args.data,
-        valid_location=args.validation,
-        output_location=args.output,
-        epochs=args.epochs,
-        language=args.language,
+        tokenizer_location=args.tokenizer[0],
+        data_location=args.data[0],
+        valid_location=args.validation[0],
+        output_location=args.output[0],
+        epochs=args.epochs[0],
+        language=args.language[0],
         size=args.size,
         early_callback=args.early_callback,
-        early_stopping_patience=args.early_stopping_patience,
+        early_stopping_patience=args.early_stopping_patience[0],
     )
 
     trainer.train()
@@ -227,17 +229,13 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--early_callback",
-        "-ec",
-        metavar="early_callback",
         default=False,
-        type=bool,
-        nargs=1,
+        action="store_true",
         help="This sets the model to stop once it plateaus.",
     )
 
     parser.add_argument(
         "--early_stopping_patience",
-        "-esp",
         metavar="early_stopping_patience",
         default=2,
         type=int,

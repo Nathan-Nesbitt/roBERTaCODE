@@ -1,5 +1,6 @@
 data
-venv
+venv*
+tokenizer*
 .vscode
 *.pbs
 *.pyc
