@@ -12,6 +12,6 @@ python wbo_train.py \
     --train_data ./data/train/full.txt.values \
     --validation_data ./data/validation/full.txt.values \
     --test_data ./data/test/full.txt.values \
-    --output ./models/
-    --epochs 40
+    --output ./models/ \
+    --epochs 40 \
     --early_callback true
