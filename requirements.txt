@@ -4,3 +4,4 @@ sh
 tqdm
 tokenizers
 datasets
+sklearn
