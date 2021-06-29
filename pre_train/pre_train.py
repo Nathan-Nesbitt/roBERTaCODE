@@ -144,7 +144,7 @@ def main(args):
         language=args.language[0],
         size=args.size,
         early_callback=args.early_callback,
-        early_stopping_patience=args.early_stopping_patience[0],
+        early_stopping_patience=args.early_stopping_patience,
     )
 
     trainer.train()

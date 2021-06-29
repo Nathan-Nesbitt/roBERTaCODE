@@ -9,13 +9,23 @@ cd ../
 # Just incase you forgot to use the venv
 . venv/bin/activate
 
-# Runs through the scripts
+# Change these values based on the model and size you want
+size="large"
+language="python"
+epochs=50
+
+# These are generated based on the previous variables
+tokenizer="./tokenizer_${language}_${size}"
+data="data/train_${language}_${size}.txt"
+validation="data/valid_${language}_${size}.txt"
+
+# Runs through the scripts, if you don't want it to halt 
+# after plateau remove early_callback
 python3 pre_train/pre_train.py \
-    --tokenizer "./tokenizer_combined_small" \
-    --language "combined" \
-    --size "large" \
-    --data "data/train_combined_small.txt" \
-    --validation "data/valid_combined_small.txt" \
-    --epochs 20 \
-    --early_callback \
-    --early_stopping_patience 2
+    --tokenizer $tokenizer \
+    --language $language \
+    --size $size \
+    --data $data \
+    --validation $validation \
+    --epochs $epochs \
+    --early_callback
