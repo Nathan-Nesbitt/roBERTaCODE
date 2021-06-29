@@ -184,11 +184,10 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--model",
+        "--model_name",
         "-m",
         metavar="model",
         type=str,
-        nargs=1,
         required=True,
         help="Location of the model, this is a relative path to the \
                 current file. We assume that the tokenizer is included in \
@@ -200,7 +199,6 @@ if __name__ == "__main__":
         "-l",
         metavar="language",
         type=str,
-        nargs="?",
         required=True,
         help="This is the language the roBERTa code PTM was trained on. \
             The options are python, java, javascript, go, ruby, php or combined.",
@@ -210,7 +208,6 @@ if __name__ == "__main__":
         "--train_data",
         metavar="train",
         type=str,
-        nargs=1,
         help="Location of the training data file, this is a relative path to the \
             current file.",
     )
@@ -219,7 +216,6 @@ if __name__ == "__main__":
         "--validation_data",
         metavar="valid",
         type=str,
-        nargs=1,
         help="Location of the validation data file, this is a relative path to the \
             current file.",
     )
@@ -228,7 +224,6 @@ if __name__ == "__main__":
         "--test_data",
         metavar="test",
         type=str,
-        nargs=1,
         help="Location of the test data file, this is a relative path to the \
             current file.",
     )
@@ -238,53 +233,44 @@ if __name__ == "__main__":
         "-o",
         metavar="output",
         type=str,
-        nargs=1,
         help="Location of the output for this run, this is a relative path to the \
             current directory. The language will be appended to this. ",
     )
 
     parser.add_argument(
         "--epochs",
+        "-e",
         metavar="epochs",
         type=int,
-        nargs=1,
         help="Number of epochs to train the model for.",
     )
 
     parser.add_argument(
         "--early_callback",
-        metavar="early_callback",
         default=False,
-        type=bool,
-        nargs=1,
+        action="store_true",
         help="This sets the model to stop once it plateaus.",
     )
 
     parser.add_argument(
         "--early_stopping_patience",
-        "-esp",
         metavar="early_stopping_patience",
         default=2,
         type=int,
-        nargs=1,
         help="How many epochs a model can plateau for before killing.",
     )
 
     parser.add_argument(
         "--train",
-        metavar="train",
         default=False,
-        type=bool,
-        nargs=1,
+        action="store_true",
         help="Should the model be trained?",
     )
 
     parser.add_argument(
         "--test",
-        metavar="test",
         default=False,
-        type=bool,
-        nargs=1,
+        action="store_true",
         help="Should the model be tested?",
     )
 
