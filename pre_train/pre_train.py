@@ -127,7 +127,7 @@ class PreTrainer:
                 eval_dataset=self.validation_dataset,
             )
 
-        trainer.train()
+        trainer.train(resume_from_checkpoint=True)
 
         # Save the model
         trainer.save_model(self.output_location)
