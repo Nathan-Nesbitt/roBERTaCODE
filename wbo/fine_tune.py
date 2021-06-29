@@ -114,7 +114,10 @@ class WBO:
                 eval_dataset=validation_data,
             )
 
-        trainer.train(resume_from_checkpoint=True)
+        try:
+            trainer.train(resume_from_checkpoint=True)
+        except ValueError:
+            trainer.train()
 
         trainer.save_model(self.output_directory)
 
