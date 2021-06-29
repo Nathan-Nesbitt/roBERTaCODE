@@ -127,7 +127,10 @@ class PreTrainer:
                 eval_dataset=self.validation_dataset,
             )
 
-        trainer.train(resume_from_checkpoint=True)
+        try:
+            trainer.train(resume_from_checkpoint=True)
+        except ValueError:
+            trainer.train()
 
         # Save the model
         trainer.save_model(self.output_location)
@@ -136,12 +139,12 @@ class PreTrainer:
 def main(args):
 
     trainer = PreTrainer(
-        tokenizer_location=args.tokenizer[0],
-        data_location=args.data[0],
-        valid_location=args.validation[0],
-        output_location=args.output[0],
-        epochs=args.epochs[0],
-        language=args.language[0],
+        tokenizer_location=args.tokenizer,
+        data_location=args.data,
+        valid_location=args.validation,
+        output_location=args.output,
+        epochs=args.epochs,
+        language=args.language,
         size=args.size,
         early_callback=args.early_callback,
         early_stopping_patience=args.early_stopping_patience,
@@ -162,7 +165,7 @@ if __name__ == "__main__":
         "-l",
         metavar="language",
         type=str,
-        nargs="?",
+        required=True,
         help="This is the language you would like to pre-train on. \
             The options are python, java, javascript, go, ruby, php or all.",
     )
@@ -172,7 +175,7 @@ if __name__ == "__main__":
         "-s",
         metavar="size",
         type=str,
-        nargs=1,
+        required=True,
         help="The size of the training set that you are training on. \
             The options are small, medium, large.",
     )
@@ -182,7 +185,6 @@ if __name__ == "__main__":
         "-t",
         metavar="tokenizer",
         type=str,
-        nargs=1,
         help="Location of the tokenizer, this is a relative path to the \
             current file. This defaults to 'tokenizer_[lang]' unless 'all' is \
             specified then it is just 'tokenizer'",
@@ -193,7 +195,6 @@ if __name__ == "__main__":
         "-d",
         metavar="data",
         type=str,
-        nargs=1,
         help="Location of the training data file, this is a relative path to the \
             current file. This will default to './data/train_[size].txt'",
     )
@@ -203,7 +204,6 @@ if __name__ == "__main__":
         "-v",
         metavar="valid",
         type=str,
-        nargs=1,
         help="Location of the validation data file, this is a relative path to the \
             current file. This will default to './data/valid_[size].txt'",
     )
@@ -213,7 +213,6 @@ if __name__ == "__main__":
         "-o",
         metavar="output",
         type=str,
-        nargs=1,
         help="Location of the output for this run, this is a relative path to the \
             current file. This will default to 'roBERTaCODE_[language]_[size]'",
     )
@@ -223,7 +222,6 @@ if __name__ == "__main__":
         "-e",
         metavar="epochs",
         type=int,
-        nargs=1,
         help="Number of epochs to train the model for.",
     )
 
