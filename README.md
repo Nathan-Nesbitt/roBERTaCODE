@@ -1,5 +1,9 @@
-# RoBERTaCODE - Code Summarization using RoBERTa PTM
-This is the code used to train the model used in my thesis
+<p align="center">
+    <img src="./img/logo.png">
+</p>
+
+## What is this?
+This is the code used to train the models used in my thesis
 on code summarization using Transformer PTMs titled "Pre-Trained Models for 
 Machine Translation of Code and Natural Language".
 
