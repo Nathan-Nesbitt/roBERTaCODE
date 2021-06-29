@@ -1,6 +1,6 @@
-<p align="center">
+<a href="https://github.com/Nathan-Nesbitt/roBERTaCODE"><p align="center">
     <img src="./img/logo.png">
-</p>
+</p></a>
 
 ## What is this?
 This is the code used to train the models used in my thesis

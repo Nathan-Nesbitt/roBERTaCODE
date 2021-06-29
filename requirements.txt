@@ -5,3 +5,5 @@ tqdm
 tokenizers
 datasets
 sklearn
+gdown
+zip
