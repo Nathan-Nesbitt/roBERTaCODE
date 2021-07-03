@@ -27,6 +27,7 @@ data_dir=../data/code2nl/CodeSearchNet
 
 # These are variables that are created from previous variables
 
+pretrained_model="../roBERTaCODE_${PTMlang}_${size}_${PTMepochs}"
 output_dir="model/PTM_${PTMlang}_epochs_${epochs}_finetune_${lang}"
 train_file=$data_dir/$lang/train.jsonl
 dev_file=$data_dir/$lang/valid.jsonl 
