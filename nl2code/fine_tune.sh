@@ -7,9 +7,10 @@
 # all you need to do is change the variables after this comment, the rest of 
 # the variables will automatically be handled 
 
+size=large
 lang=java # This is the fine tune language
+PTMepochs=20 # This is the number of PTM epochs
 PTMlang=java # This is the PTM language that you chose, just used for naming 
-pretrained_model="../roBERTaCODE_java_large/" # This is where the PTM is stored, or roberta-base if you don't have a PTM
 epochs=40 # This is the number of epochs, view the readme to understand why this is 40 if you don't set to 40 it will not run full 
 
 # These are variables that can be changed if you want to change the experiment
