@@ -245,5 +245,7 @@ if __name__ == "__main__":
 
     if not args.output:
         args.output = f"roBERTaCODE_{args.language}_{args.size}_{args.epochs}"
+    if args.early_callback:
+        args.output = f"{args.output}_early_callback"
 
     main(args)
