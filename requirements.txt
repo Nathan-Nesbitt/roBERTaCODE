@@ -6,4 +6,3 @@ tokenizers
 datasets
 sklearn
 gdown
-zip
