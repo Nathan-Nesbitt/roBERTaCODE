@@ -6,3 +6,4 @@ tokenizers
 datasets
 sklearn
 gdown
+numpy
