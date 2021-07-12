@@ -11,7 +11,7 @@ cd ../
 
 # Change these values based on the model and size you want
 size="large"
-language="python"
+language="combined"
 epochs=50
 
 # These are generated based on the previous variables
@@ -21,7 +21,7 @@ validation="data/valid_${language}_${size}.txt"
 
 # Runs through the scripts, if you don't want it to halt 
 # after plateau remove early_callback
-python3 pre_train/pre_train.py \
+python pre_train/pre_train.py \
     --tokenizer $tokenizer \
     --language $language \
     --size $size \
