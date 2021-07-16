@@ -31,7 +31,6 @@ class OutputCallback(TrainerCallback):
 
     def on_evaluate(self, args, state, control, **kwargs):
         logging.info(f"Evaluated Epoch {state.epoch}")
-        logging.info(f"Current Epoch has metric {self.metrics}")
         logging.info(
             f"The best metric so far is {state.best_metric} on checkpoint {state.best_model_checkpoint }"
         )
